@@ -33,6 +33,7 @@ const createCategory = asyncHandler(async (req, res) => {
   const category = new Category({
     name:"sample name category",
     description:"sample description",
+    image:"https://www.barschool.net/sites/default/files/styles/image_gallery_xl/public/2022-05/Cuba%20Libre.jpg?h=2d7bcac0&itok=pEsF8LVB"
   });
 
   const createdCategory = await category.save();
@@ -43,13 +44,15 @@ const createCategory = asyncHandler(async (req, res) => {
 // @route   PUT /api/categories/:id
 // @access  Private/Admin
 const updateCategory = asyncHandler(async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description,image } = req.body;
+  console.log(req.body)
 
   const category = await Category.findById(req.params.id);
 
   if (category) {
     category.name = name || category.name;
     category.description = description || category.description;
+    category.image = image || category.image;
 
     const updatedCategory = await category.save();
     res.json(updatedCategory);
