@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
+import sendEmail from '../utils/sendEmail.js'
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -240,6 +241,26 @@ const removeFromWish = asyncHandler(async (req, res) => {
 });
 
 
+const sendRestPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body
+
+  const user = await User.findOne({ email })
+
+  if (user) {
+    let token = await new Token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    })
+
+    const url = `${process.env.BASE_URL}reset-password/${user._id}/${token.token}/`;
+    await sendEmail(user.email, "Password Reset", url);
+  } else {
+    res.status(401)
+    throw new Error('User Does Not Exist')
+  }
+})
+
+
 export {
   authUser,
   registerUser,
@@ -251,5 +272,6 @@ export {
   updateUser,
   addToWish,
   removeFromWish,
-  userWishlist
+  userWishlist,
+  sendRestPassword
 }

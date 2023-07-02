@@ -12,10 +12,13 @@ import {
   addToWish,
   removeFromWish,
   userWishlist,
+  sendRestPassword,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
+router.route('/reset-password').post(sendRestPassword)
+
 router.post('/login', authUser)
 router.post('/addToWish/:id',addToWish)
 router.post('/removeFromWish/:id',removeFromWish)
