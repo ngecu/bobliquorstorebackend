@@ -249,7 +249,7 @@ const sendRestPassword = asyncHandler(async (req, res) => {
 
   if (user) {
     let token = await Token.findOne({ userId: user._id });
-    
+
 		if (!token) {
 			token = await new Token({
 				userId: user._id,
@@ -259,6 +259,7 @@ const sendRestPassword = asyncHandler(async (req, res) => {
 
     const url = `${process.env.BASE_URL}reset-password/${user._id}/${token.token}/`;
     await sendEmail(user.email, "Password Reset", url);
+    res.status(200).send({ message: "Password reset link sent to your email account" });
   } else {
     res.status(401)
     throw new Error('User Does Not Exist')
