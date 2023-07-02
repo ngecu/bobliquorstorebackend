@@ -18,6 +18,9 @@ router.route('/').post(registerUser).get(protect, admin, getUsers)
 router.post('/login', authUser)
 router.post('/addToWish/:id',addToWish)
 router.post('/removeFromWish/:id',removeFromWish)
+router.post('/userWishlist/:id',userWishlist)
+
+
 
 
 router

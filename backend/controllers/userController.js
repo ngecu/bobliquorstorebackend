@@ -194,6 +194,24 @@ const addToWish = asyncHandler(async (req, res) => {
   }
 });
 
+const userWishlist = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Populate wishlist products
+    await user.populate('wishlist');
+    console.log("wishlist is ",user.wishlist)
+    res.json(user.wishlist);
+  } catch (error) {
+    console.error('Failed to add product to wishlist:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 const removeFromWish = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -232,5 +250,6 @@ export {
   getUserById,
   updateUser,
   addToWish,
-  removeFromWish
+  removeFromWish,
+  userWishlist
 }
