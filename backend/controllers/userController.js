@@ -5,9 +5,13 @@ import sendEmail from '../utils/sendEmail.js'
 import Token from '../models/tokenModel.js'
 import crypto from 'crypto';
 import fs from 'fs';
-import Handlebars from 'handlebars'
+import handlebars from 'handlebars'
+import useragent from 'useragent'
 
-const templateFilePath = '../utils/email-template.hbs'
+
+
+
+const templateFilePath = "backend/controllers/email-template.hbs"
 
 // Function to read the contents of the HTML template file
 const readHTMLFile = (path) => {
@@ -283,14 +287,32 @@ const sendRestPassword = asyncHandler(async (req, res) => {
 
 
 
-    const url = `${process.env.BASE_URL}reset-password/${user._id}/${token.token}/`;
+    const url = `${process.env.BASE_URL}new-password/${user._id}/${token.token}/`;
+
+    // Example user agent string
+    const userAgentString = req.headers['user-agent'];
+
+    // Parse the user agent string
+    const agent = useragent.parse(userAgentString);
+
+    // Retrieve the browser name
+    const browserName = agent.family;
+
+    // Retrieve the operating system
+    const operatingSystem = agent.os.toString();
+
+    console.log(userAgentString)
+    console.log(operatingSystem)
 
     readHTMLFile(templateFilePath)
   .then((templateContent) => {
     // Define the data for the template variables
     const templateData = {
-      name: 'John Doe',
-      email: 'johndoe@example.com',
+      name: user.name,
+      email: user.email,
+      browserName,
+      operatingSystem,
+      action_url:url
     };
 
     // Render the email template with the data
@@ -338,12 +360,6 @@ const verifyResetPassword = asyncHandler(async (req,res)=>{
 
 const setNewPassword = asyncHandler(async (req, res) => {
 	try {
-		const passwordSchema = Joi.object({
-			password: passwordComplexity().required().label("Password"),
-		});
-		const { error } = passwordSchema.validate(req.body);
-		if (error)
-			return res.status(400).send({ message: error.details[0].message });
 
 		const user = await User.findOne({ _id: req.params.id });
 		if (!user) return res.status(400).send({ message: "Invalid link" });
@@ -354,12 +370,18 @@ const setNewPassword = asyncHandler(async (req, res) => {
 		});
 		if (!token) return res.status(400).send({ message: "Invalid link" });
 
-		if (!user.verified) user.verified = true;
+		// if (!user.verified) return res.status(400).send({ message: "Invalid link" });
 
-		const salt = await bcrypt.genSalt(Number(process.env.SALT));
-		const hashPassword = await bcrypt.hash(req.body.password, salt);
+    if (req.body.password) {
+      user.password = req.body.password
+    }
 
-		user.password = hashPassword;
+    // const updatedUser = await user.save()
+
+		// const salt = await bcrypt.genSalt(Number(process.env.SALT));
+		// const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+		// user.password = hashPassword;
 		await user.save();
 		await token.remove();
 

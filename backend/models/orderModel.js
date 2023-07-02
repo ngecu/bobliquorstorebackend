@@ -7,6 +7,13 @@ const orderSchema = mongoose.Schema(
       required: true,
       ref: 'User',
     },
+    additional_notes:{
+      type:String,
+
+    },
+    mpesa_number:{
+      type:Number
+    },
     orderItems: [
       {
         name: { type: String, required: true },
@@ -22,9 +29,9 @@ const orderSchema = mongoose.Schema(
     ],
     shippingAddress: {
       address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      first_name: { type: String, required: true },
+      last_name: { type: String, required: true },
+      phone_number: { type: String, required: true },
     },
     paymentMethod: {
       type: String,
