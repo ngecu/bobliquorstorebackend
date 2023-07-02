@@ -277,8 +277,7 @@ const verifyResetPassword = asyncHandler(async (req,res)=>{
 			token: req.params.token,
 		});
 		if (!token) return res.status(400).send({ message: "Invalid link" });
-
-		res.status(200).send("Valid Url");
+		res.status(200).send(`http://localhost:3000/new-password/${userId}/${token}`);
 	} catch (error) {
 		res.status(500).send({ message: "Internal Server Error" });
 	}
