@@ -11,6 +11,7 @@ import {
   updateUser,
   addToWish,
   removeFromWish,
+  userWishlist,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
