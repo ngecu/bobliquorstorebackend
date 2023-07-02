@@ -16,6 +16,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishlist:user.wishlist,
       token: generateToken(user._id),
     })
   } else {
@@ -166,6 +167,61 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 })
 
+const addToWish = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const { productId } = req.body;
+
+    if (user.wishlist.includes(productId)) {
+      throw new Error('Product already exists in the wishlist');
+    }
+
+    user.wishlist.push(productId);
+    await user.save();
+
+    // Populate wishlist products
+    await user.populate('wishlist');
+    console.log("wishlist is ",user.wishlist)
+    res.json(user.wishlist);
+  } catch (error) {
+    console.error('Failed to add product to wishlist:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+const removeFromWish = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const { productId } = req.body;
+
+    if (!user.wishlist.includes(productId)) {
+      throw new Error('Product does not exist in the wishlist');
+    }
+
+    user.wishlist = user.wishlist.filter((item) => item.toString() !== productId);
+    await user.save();
+
+    // Populate wishlist products
+    await user.populate('wishlist');
+    console.log("wishlist is ", user.wishlist);
+    res.json(user.wishlist);
+  } catch (error) {
+    console.error('Failed to remove product from wishlist:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
 export {
   authUser,
   registerUser,
@@ -175,4 +231,6 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  addToWish,
+  removeFromWish
 }
