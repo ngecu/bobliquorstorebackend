@@ -100,6 +100,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      wishlist:user.wishlist
     })
   } else {
     res.status(404)

@@ -27,7 +27,7 @@ router.route('/change-password/:id/:token').post(setNewPassword)
 router.post('/login', authUser)
 router.post('/addToWish/:id',addToWish)
 router.post('/removeFromWish/:id',removeFromWish)
-router.post('/userWishlist/:id',userWishlist)
+router.get('/userWishlist/:id',userWishlist)
 
 
 
