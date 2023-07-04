@@ -371,7 +371,7 @@ const setNewPassword = asyncHandler(async (req, res) => {
 		if (!token) return res.status(400).send({ message: "Invalid link" });
 
 		// if (!user.verified) return res.status(400).send({ message: "Invalid link" });
-
+    // $2a$10$NkwMc8U5nV214hHBIQVNau6POGP2R4mv49Lb9cirTLY/Cb96I9sGi
     if (req.body.password) {
       user.password = req.body.password
     }
