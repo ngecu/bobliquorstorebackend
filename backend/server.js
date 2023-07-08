@@ -11,6 +11,9 @@ import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
+import lipaNaMpesaRoutes from "./routes/lipanampesaRouter.js"
+import bannerRoutes from './routes/bannerRoutes.js'
+
 import cors from 'cors'
 
 dotenv.config()
@@ -30,6 +33,8 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/categories',categoryRoutes)
+app.use('/api/mpesa',lipaNaMpesaRoutes)
+app.use('/api/banners', bannerRoutes);
 
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)

@@ -15,7 +15,13 @@ const categorySchema =mongoose.Schema(
     image:{
       type: String,
       required: true, 
-    }
+    },
+    brandings:[
+      {
+        type: String,
+        required: true, 
+      }
+    ]
   },
   {
     timestamps: true,
