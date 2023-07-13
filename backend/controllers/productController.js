@@ -63,16 +63,22 @@ const createProduct = asyncHandler(async (req, res) => {
     price: 0,
     user: req.user._id,
     image: '/images/sample.jpg',
-    brand: 'Sample brand',
-    category: '648a3c1059b8f5eb381f29f0',
-    countInStock: 0,
+    category: '64afe7cf889767537eef0a98',
     numReviews: 0,
     description: 'Sample description',
-  })
+    brandings: [
+      {
+        branding: 'Sample branding',
+        countInStock: 100,
+        price: 0,
+        size: 'Sample size',
+      },
+    ],
+  });
 
-  const createdProduct = await product.save()
-  res.status(201).json(createdProduct)
-})
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
+});
 
 // @desc    Update a product
 // @route   PUT /api/products/:id

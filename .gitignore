@@ -8,6 +8,10 @@ node_modules/
 /frontend
 frontend/
 frontend
+vite-project
+/vite-project
+vite-project/
+
 
 # testing
 /coverage

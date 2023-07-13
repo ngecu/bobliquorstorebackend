@@ -164,8 +164,10 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select('-password')
-
+  console.log("user")
+  
   if (user) {
+    console.log(user)
     res.json(user)
   } else {
     res.status(404)
