@@ -36,41 +36,41 @@ const productSchema = mongoose.Schema(
       required: true,
       ref: 'Category',
     },
-    brandings: [
+    branding: {
+      type: String,
+      required: true,
+    },
+    productDetails: [
       {
-        branding: {
-          type: String,
-          required: true,
-        },
-        countInStock: {
+        size: {
           type: Number,
           required: true,
-          default: 0,
         },
         price: {
           type: Number,
           required: true,
           default: 0,
         },
-        size: {
+        countInStock: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+        description: {
           type: String,
           required: true,
         },
       },
     ],
-    description: {
-      type: String,
-      required: true,
-    },
     reviews: [reviewSchema],
     rating: {
       type: Number,
-      required: true,
+      // required: true,
       default: 0,
     },
     numReviews: {
       type: Number,
-      required: true,
+      // required: true,
       default: 0,
     },
   },
@@ -78,6 +78,7 @@ const productSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 const Product = mongoose.model('Product', productSchema);
 

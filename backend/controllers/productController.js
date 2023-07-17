@@ -21,6 +21,8 @@ const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
+  
+  console.log(products)
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
@@ -57,61 +59,70 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @desc    Create a product
 // @route   POST /api/products
 // @access  Private/Admin
+// Create a product
+// Create a product
 const createProduct = asyncHandler(async (req, res) => {
-  const product = new Product({
-    name: 'Sample name',
-    price: 0,
-    user: req.user._id,
+  const dummyProduct = {
+    name: 'Sample Product',
+    user:req.user._id,
     image: '/images/sample.jpg',
-    category: '64afe7cf889767537eef0a98',
-    numReviews: 0,
-    description: 'Sample description',
-    brandings: [
+    category: '64afe7cf889767537eef0a98', // Category ID
+    branding: 'Sample Branding',
+    productDetails: [
       {
-        branding: 'Sample branding',
-        countInStock: 100,
-        price: 0,
-        size: 'Sample size',
+        size: 100,
+        price: 10,
+        countInStock: 50,
+        description: 'Sample Description',
       },
     ],
-  });
+    description: 'Sample Description',
+    reviews: [],
+    rating: 0,
+    numReviews: 0,
+  };
+
+  const product = new Product(dummyProduct);
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
 
-// @desc    Update a product
-// @route   PUT /api/products/:id
-// @access  Private/Admin
+
+// Update a product
 const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
-    price,
-    description,
     image,
-    brand,
     category,
-    countInStock,
-  } = req.body
+    branding,
+    productDetails,
+    description,
+    reviews,
+    rating,
+    numReviews,
+  } = req.body;
 
-  const product = await Product.findById(req.params.id)
+  const product = await Product.findById(req.params.id);
 
   if (product) {
-    product.name = name
-    product.price = price
-    product.description = description
-    product.image = image
-    product.brand = brand
-    product.category = category
-    product.countInStock = countInStock
+    product.name = name;
+    product.image = image;
+    product.category = category;
+    product.branding = branding;
+    product.productDetails = productDetails;
+    product.description = description;
+    product.reviews = reviews;
+    product.rating = rating;
+    product.numReviews = numReviews;
 
-    const updatedProduct = await product.save()
-    res.json(updatedProduct)
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
   } else {
-    res.status(404)
-    throw new Error('Product not found')
+    res.status(404);
+    throw new Error('Product not found');
   }
-})
+});
 
 // @desc    Create new review
 // @route   POST /api/products/:id/reviews
