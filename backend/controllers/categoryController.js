@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Category from '../models/categoryModel.js';
+import Product from '../models/productModel.js';
 
 // @desc    Fetch all categories
 // @route   GET /api/categories
@@ -13,15 +14,32 @@ const getCategories = asyncHandler(async (req, res) => {
 // @route   GET /api/categories/:id
 // @access  Public
 const getCategoryById = asyncHandler(async (req, res) => {
-  const category = await Category.findById(req.params.id);
+  try {
+    const category = await Category.findById(req.params.id);
 
-  if (category) {
-    res.json(category);
-  } else {
-    res.status(404);
-    throw new Error('Category not found');
+    if (!category) {
+      res.status(404);
+      throw new Error('Category not found');
+    }
+
+    console.log(category);
+
+    // Assuming you have a foreign key/reference field named "category" in the Product model
+    const products = await Product.find({ category: req.params.id });
+
+    // Send both category and associated products as a JSON response to the client
+    res.json({ category, products });
+  } catch (error) {
+    // Handle errors here (e.g., log the error, send an error response, etc.)
+    // In a real application, you might have a centralized error handling mechanism
+    console.log(error)
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// The asyncHandler function remains the same as mentioned in the previous response
+// Please make sure you have the necessary imports and model definitions for Category and Product
+
 
 // @desc    Create a category
 // @route   POST /api/categories
