@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const reviewSchema = mongoose.Schema(
   {
-    name: { type: String, required: true },
-    rating: { type: Number, required: true },
-    comment: { type: String, required: true },
+    name: { type: String, required: false },
+    rating: { type: Number, required: false },
+    comment: { type: String, required: false },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -14,7 +14,7 @@ const reviewSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-);
+)
 
 const productSchema = mongoose.Schema(
   {
@@ -31,55 +31,54 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    brand: {
+      type: String,
+      required: true,
+    },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Category',
     },
-    branding: {
+    branding:{
       type: String,
       required: true,
     },
-    productDetails: [
-      {
-        size: {
-          type: Number,
-          required: true,
-        },
-        price: {
-          type: Number,
-          required: true,
-          default: 0,
-        },
-        countInStock: {
-          type: Number,
-          required: true,
-          default: 0,
-        },
-        description: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    discount:{
+      type:Number,
+      required:true
+    },
+    description: {
+      type: String,
+      required: true,
+    },
     reviews: [reviewSchema],
     rating: {
       type: Number,
-      // required: true,
+      required: true,
       default: 0,
     },
     numReviews: {
       type: Number,
-      // required: true,
+      required: true,
+      default: 0,
+    },
+    price: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    countInStock: {
+      type: Number,
+      required: true,
       default: 0,
     },
   },
   {
     timestamps: true,
   }
-);
+)
 
+const Product = mongoose.model('Product', productSchema)
 
-const Product = mongoose.model('Product', productSchema);
-
-export default Product;
+export default Product

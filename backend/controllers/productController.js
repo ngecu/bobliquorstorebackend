@@ -59,34 +59,25 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @desc    Create a product
 // @route   POST /api/products
 // @access  Private/Admin
-// Create a product
-// Create a product
 const createProduct = asyncHandler(async (req, res) => {
-  const dummyProduct = {
-    name: 'Sample Product',
-    user:req.user._id,
+  const product = new Product({
+    name: 'Sample name',
+    price: 0,
+    discount:Math.floor(Math.random() * (10 - 1 + 1)) + 1,
+    user: req.user._id,
     image: '/images/sample.jpg',
-    category: '64afe7cf889767537eef0a98', // Category ID
-    branding: 'Sample Branding',
-    productDetails: [
-      {
-        size: 100,
-        price: 10,
-        countInStock: 50,
-        description: 'Sample Description',
-      },
-    ],
-    description: 'Sample Description',
-    reviews: [],
-    rating: 0,
+    brand: 'Sample brand',
+    category: '648a3c1059b8f5eb381f29f0',
+    branding:'Sample Branding',
+    countInStock: 0,
     numReviews: 0,
-  };
+    description: 'Sample description',
+  })
 
-  const product = new Product(dummyProduct);
+  const createdProduct = await product.save()
+  res.status(201).json(createdProduct)
+})
 
-  const createdProduct = await product.save();
-  res.status(201).json(createdProduct);
-});
 
 
 // Update a product
@@ -99,9 +90,13 @@ const updateProduct = asyncHandler(async (req, res) => {
     productDetails,
     description,
     reviews,
-    rating,
-    numReviews,
+    // rating,
+    // numReviews,
+    discount,
+    price,
+    countInStock
   } = req.body;
+  console.log(req.body)
 
   const product = await Product.findById(req.params.id);
 
@@ -112,9 +107,12 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.branding = branding;
     product.productDetails = productDetails;
     product.description = description;
-    product.reviews = reviews;
-    product.rating = rating;
-    product.numReviews = numReviews;
+    // product.reviews = reviews;
+    // product.rating = rating;
+    // product.numReviews = numReviews;
+    product.discount = discount;
+    product.price = price;
+    product.countInStock = countInStock
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
