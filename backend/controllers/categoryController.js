@@ -25,8 +25,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
     console.log(category);
 
     // Assuming you have a foreign key/reference field named "category" in the Product model
-    const products = await Product.find({ category: req.params.id });
-
+    const products = await Product.find({ category: req.params.id }).populate('category');
     // Send both category and associated products as a JSON response to the client
     res.json({ category, products });
   } catch (error) {
